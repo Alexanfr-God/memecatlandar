@@ -21,25 +21,27 @@ export const MemeActions = ({
   onUpdate
 }: MemeActionsProps) => {
   return (
-    <div className="flex gap-2">
-      {(isAdmin || isVerified) && (
-        <>
-          <WatchlistButton 
-            memeId={memeId}
-            userId={userId}
-            showText={true}
-            className="mr-2"
-          />
-          <TuzemoonButton
-            memeId={memeId}
-            memeTitle={memeTitle}
-            isFeatured={isFeatured}
-            isAdmin={isAdmin}
-            isVerified={isVerified}
-            onUpdate={onUpdate}
-          />
-        </>
-      )}
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-2">
+        <WatchlistButton 
+          memeId={memeId} 
+          userId={userId} 
+          showText={true} 
+          className="w-full justify-center"
+        />
+        {(isAdmin || isVerified) && (
+          <>
+            <TuzemoonButton
+              memeId={memeId}
+              memeTitle={memeTitle}
+              isFeatured={isFeatured}
+              isAdmin={isAdmin}
+              isVerified={isVerified}
+              onUpdate={onUpdate}
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 };

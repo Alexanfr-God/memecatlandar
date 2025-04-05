@@ -76,10 +76,12 @@ export const WatchlistButton = ({
     }
 
     try {
+      const currentWatchState = isInWatchlist(memeId);
       await toggleWatchlist(memeId, userId);
+      
       toast({
-        title: isInWatchlist(memeId) ? "Removed from Watchlist" : "Added to Watchlist",
-        description: isInWatchlist(memeId) 
+        title: currentWatchState ? "Removed from Watchlist" : "Added to Watchlist",
+        description: currentWatchState 
           ? "This meme has been removed from your watchlist"
           : "This meme has been added to your watchlist",
       });

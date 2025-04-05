@@ -26,6 +26,7 @@ export const useWatchlistStore = create<WatchlistState>((set, get) => ({
 
     try {
       if (isCurrentlyInWatchlist) {
+        // Delete from watchlist
         const { error: deleteError } = await supabase
           .from("Watchlist")
           .delete()
@@ -33,15 +34,18 @@ export const useWatchlistStore = create<WatchlistState>((set, get) => ({
           .eq("meme_id", parseInt(memeId));
 
         if (deleteError) throw deleteError;
+        
+        // Update local state
         currentWatchlist.delete(memeId);
+        console.log(`Removed meme ${memeId} from watchlist`);
       } else {
+        // Add to watchlist
         const { error: insertError } = await supabase
           .from("Watchlist")
           .insert([{ 
             user_id: userId, 
             meme_id: parseInt(memeId) 
-          }])
-          .select();
+          }]);
 
         if (insertError) {
           if (insertError.code === '23505') {
@@ -50,7 +54,10 @@ export const useWatchlistStore = create<WatchlistState>((set, get) => ({
           }
           throw insertError;
         }
+        
+        // Update local state
         currentWatchlist.add(memeId);
+        console.log(`Added meme ${memeId} to watchlist`);
       }
 
       set({ watchlist: currentWatchlist });
