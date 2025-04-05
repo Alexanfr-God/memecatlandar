@@ -1,15 +1,16 @@
+
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const useWatchlistSubscription = (onUpdate: () => void) => {
   useEffect(() => {
     const channel = supabase
-      .channel('watchlist_realtime_channel')
+      .channel('watchlist_broadcasts')
       .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'Watchlist' },
+        'broadcast',
+        { event: '*' },
         (payload) => {
-          console.log("Watchlist change detected:", payload);
+          console.log("Watchlist broadcast received:", payload);
           onUpdate();
         }
       )

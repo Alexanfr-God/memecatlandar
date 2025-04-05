@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -87,9 +88,9 @@ export function Watchlist() {
     }
   });
 
-  // Use the subscription hook to handle real-time updates
+  // Use the subscription hook to handle real-time updates via broadcast
   useWatchlistSubscription(() => {
-    console.log("Watchlist updated, refetching...");
+    console.log("Watchlist broadcast received, refetching...");
     void refetch();
   });
 

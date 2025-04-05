@@ -1,3 +1,4 @@
+
 import { create } from "zustand";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -89,21 +90,23 @@ export const subscribeToWatchlistChanges = (userId: string) => {
   console.log("Setting up watchlist subscription for user:", userId);
   
   const channel = supabase
-    .channel(`watchlist_changes_${userId}`)
+    .channel(`watchlist_broadcasts`)
     .on(
-      "postgres_changes",
+      "broadcast",
       {
-        event: "*",
-        schema: "public",
-        table: "Watchlist",
-        filter: `user_id=eq.${userId}`,
+        event: "*"
       },
       async (payload) => {
-        console.log("Watchlist change detected:", payload);
-        try {
-          await useWatchlistStore.getState().initializeWatchlist(userId);
-        } catch (error) {
-          console.error("Error handling watchlist change:", error);
+        const payloadData = payload.payload as any;
+        
+        // Only update if this broadcast is relevant to this user
+        if (payloadData.user_id === userId) {
+          console.log("Watchlist broadcast received:", payload);
+          try {
+            await useWatchlistStore.getState().initializeWatchlist(userId);
+          } catch (error) {
+            console.error("Error handling watchlist change:", error);
+          }
         }
       }
     )

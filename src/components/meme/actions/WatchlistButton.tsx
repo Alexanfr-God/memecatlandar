@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Bookmark } from "lucide-react";
 import { useEffect } from "react";
@@ -31,23 +32,25 @@ export const WatchlistButton = ({
     }
   }, [userId, initializeWatchlist]);
 
-  // Subscribe to realtime changes for this specific meme
+  // Subscribe to broadcast channel for watchlist changes
   useEffect(() => {
     if (!userId) return;
 
     const channel = supabase
-      .channel(`watchlist_changes_${memeId}`)
+      .channel('watchlist_broadcasts')
       .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'Watchlist',
-          filter: `user_id=eq.${userId} AND meme_id=eq.${memeId}`
-        },
+        'broadcast',
+        { event: '*' },
         (payload) => {
-          console.log('Watchlist changed for meme:', memeId, payload);
-          void initializeWatchlist(userId);
+          const payloadData = payload.payload as any;
+          
+          // Only update if this broadcast is relevant to this user and meme
+          if (payloadData.user_id === userId && 
+              (payloadData.meme_id === parseInt(memeId) || 
+               payloadData.record?.meme_id === parseInt(memeId))) {
+            console.log('Watchlist broadcast received for meme:', memeId, payload);
+            void initializeWatchlist(userId);
+          }
         }
       )
       .subscribe();
