@@ -36,6 +36,8 @@ export const SessionHandler = () => {
     // Configure security settings for the auth session
     const configureAuthSecurity = async () => {
       try {
+        console.log('Checking auth security configuration...');
+        
         // Check if the auth configuration has leak protection enabled
         const { data, error } = await supabase.functions.invoke('check-auth-config', {
           body: { action: 'check_leak_protection' }
@@ -50,24 +52,28 @@ export const SessionHandler = () => {
           console.warn('Leaked password protection is disabled. Enabling it for enhanced security.');
           
           // Enable leaked password protection via API call
-          const { error: updateError } = await supabase.functions.invoke('update-auth-config', {
+          const updateResult = await supabase.functions.invoke('update-auth-config', {
             body: { enable_leak_protection: true }
           });
           
-          if (updateError) {
-            console.error('Failed to enable leak protection:', updateError);
+          if (updateResult.error) {
+            console.error('Failed to enable leak protection:', updateResult.error);
             toast({
               title: "Security Setting Update Failed",
               description: "Could not enable password leak protection. Please contact an administrator.",
               variant: "destructive"
             });
-          } else {
+          } else if (updateResult.data?.success) {
             console.log('Successfully enabled leaked password protection');
             toast({
               title: "Security Enhanced",
               description: "Password leak protection has been enabled for better security.",
             });
+          } else {
+            console.warn('Unexpected response when enabling leak protection:', updateResult);
           }
+        } else {
+          console.log('Leaked password protection is already enabled');
         }
       } catch (error) {
         console.error('Error configuring auth security:', error);

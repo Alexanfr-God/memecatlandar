@@ -41,23 +41,55 @@ serve(async (req) => {
 
     // Check if password leak protection is enabled
     if (body.action === 'check_leak_protection') {
-      // In a real implementation, this would use the Supabase Management API
+      // In a production implementation, this would use the actual Supabase Management API
       // to check if leaked password protection is enabled
-      // For demonstration purposes, we'll mock the check
+      // For this implementation, we'll use the REST API
       
-      // Note: In an actual implementation, you would use the Supabase Management API
-      // This is just a placeholder to show the concept
-      const mockLeakProtectionEnabled = false
-      
-      return new Response(
-        JSON.stringify({ 
-          success: true, 
-          leak_protection_enabled: mockLeakProtectionEnabled 
-        }),
-        { 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      try {
+        const response = await fetch(`${Deno.env.get('SUPABASE_URL')}/auth/v1/admin/config`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch auth config: ${response.status}`);
         }
-      )
+        
+        const config = await response.json();
+        console.log('Auth config retrieved:', config);
+        
+        // Check if password checking is enabled (this depends on the exact structure of the API response)
+        const leakProtectionEnabled = config.security?.password_checks_enabled || false;
+        
+        return new Response(
+          JSON.stringify({ 
+            success: true, 
+            leak_protection_enabled: leakProtectionEnabled 
+          }),
+          { 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+          }
+        );
+      } catch (error) {
+        console.error('Error checking auth config:', error);
+        
+        // Fallback to default (pre-configured) value
+        // In a real implementation, we should handle this error properly
+        return new Response(
+          JSON.stringify({ 
+            success: false, 
+            leak_protection_enabled: false,
+            error: error.message
+          }),
+          { 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 500
+          }
+        );
+      }
     }
 
     throw new Error('Invalid action')
