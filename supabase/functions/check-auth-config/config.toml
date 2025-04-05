@@ -1,0 +1,11 @@
+
+project_id = "dpybiegurkiqwponvxac"
+
+[global.env]
+SUPABASE_URL = "env"
+SUPABASE_SERVICE_ROLE_KEY = "env"
+
+[[check-auth-config]]
+name = "check-auth-config"
+path = "/check-auth-config"
+verify_jwt = false
