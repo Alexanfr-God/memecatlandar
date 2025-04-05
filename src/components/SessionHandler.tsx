@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -130,6 +129,9 @@ export const SessionHandler = () => {
     return () => {
       subscription.unsubscribe();
     };
+
+    // Add explicit call to configureAuthSecurity
+    void configureAuthSecurity();
   }, [toast, navigate]);
 
   return null;
