@@ -1,3 +1,4 @@
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -28,13 +29,6 @@ export const useLikeMutation = ({
       }
 
       if (hasLiked) {
-        // Remove from watchlist
-        await supabase
-          .from('Watchlist')
-          .delete()
-          .eq('user_id', userId)
-          .eq('meme_id', Number(memeId));
-
         // Decrement likes count
         await supabase
           .from('Memes')
@@ -44,14 +38,6 @@ export const useLikeMutation = ({
         if (userPoints <= 0) {
           throw new Error("Not enough points");
         }
-
-        // Add to watchlist
-        await supabase
-          .from('Watchlist')
-          .insert([{ 
-            user_id: userId, 
-            meme_id: Number(memeId)
-          }]);
 
         // Increment likes count
         await supabase
@@ -68,8 +54,8 @@ export const useLikeMutation = ({
       toast({
         title: "Success",
         description: hasLiked 
-          ? "Meme removed from watchlist" 
-          : "Meme added to watchlist",
+          ? "Meme unliked successfully" 
+          : "Meme liked successfully",
       });
     },
     onError: (error: Error) => {
