@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 
 export const Navigation = () => {
@@ -26,12 +27,6 @@ export const Navigation = () => {
         className="transition-all duration-300 hover:bg-[#FFB74D] hover:text-black px-4 py-2 rounded-md hover:scale-105"
       >
         My Memes
-      </Link>
-      <Link
-        to="/watchlist"
-        className="transition-all duration-300 hover:bg-[#FFB74D] hover:text-black px-4 py-2 rounded-md hover:scale-105"
-      >
-        Watchlist
       </Link>
       <Link
         to="/tuzemoon"

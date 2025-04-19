@@ -1,4 +1,4 @@
-import { WatchlistButton } from "../actions/WatchlistButton";
+
 import { TuzemoonButton } from "./TuzemoonButton";
 
 interface MemeActionsProps {
@@ -22,24 +22,16 @@ export const MemeActions = ({
 }: MemeActionsProps) => {
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-2">
-        <WatchlistButton 
-          memeId={memeId} 
-          userId={userId} 
-          showText={true} 
-          className="w-full justify-center"
-        />
+      <div className="grid grid-cols-1 gap-2">
         {(isAdmin || isVerified) && (
-          <>
-            <TuzemoonButton
-              memeId={memeId}
-              memeTitle={memeTitle}
-              isFeatured={isFeatured}
-              isAdmin={isAdmin}
-              isVerified={isVerified}
-              onUpdate={onUpdate}
-            />
-          </>
+          <TuzemoonButton
+            memeId={memeId}
+            memeTitle={memeTitle}
+            isFeatured={isFeatured}
+            isAdmin={isAdmin}
+            isVerified={isVerified}
+            onUpdate={onUpdate}
+          />
         )}
       </div>
     </div>
