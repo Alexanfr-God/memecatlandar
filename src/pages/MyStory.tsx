@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Support } from "@/components/Support";
 import { Footer } from "@/components/Footer";
@@ -165,10 +164,6 @@ const MyStory = () => {
 
               <h3 className="text-xl font-semibold mt-6">Top 200 Memes</h3>
               <p>The Top 200 leaderboard is where the best memes rise to the top, ranked solely by community votes. This ensures complete fairness—if people love your meme, it earns its place. For those looking to boost their content, we offer a transparent paid feature to highlight sponsored memes, which are clearly marked to differentiate them from organically popular ones.</p>
-
-              <h3 className="text-xl font-semibold mt-6">Watchlist (In Progress)</h3>
-              <p>The Watchlist is your personal hub for saving and revisiting your favorite memes. Never lose track of what inspires you—store your top picks and access them anytime, all in one place.</p>
-              <p>🚀 MemeCatLandar is just getting started—stay tuned for more innovations!</p>
 
               <h3 className="text-xl font-semibold mt-6">Tuzemoon Activation (24 Hours)</h3>
               <p>Unlock the Tuzemoon boost and make your meme stand out! This premium feature, powered by Phantom Wallet integration, lets you promote your meme for 0.1 SOL and gives it 24 hours of maximum visibility.</p>
