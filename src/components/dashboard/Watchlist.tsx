@@ -5,7 +5,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { UnifiedMemeCard } from "../meme/UnifiedMemeCard";
 import { useUserData } from "@/hooks/useUserData";
-import { useWatchlistSubscription } from "@/hooks/useWatchlistSubscription";
 import { useToast } from "@/hooks/use-toast";
 
 export function Watchlist() {
@@ -86,12 +85,6 @@ export function Watchlist() {
     meta: {
       errorMessage: "Failed to fetch watchlist"
     }
-  });
-
-  // Use the subscription hook to handle real-time updates via broadcast
-  useWatchlistSubscription(() => {
-    console.log("Watchlist broadcast received, refetching...");
-    void refetch();
   });
 
   return (
